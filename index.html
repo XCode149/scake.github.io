@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCake</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: #fffaf8;
+      color: #3c2f2f;
+    }
+
+    header {
+      background: #f8d7c2;
+      text-align: center;
+      padding: 2em 1em;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+
+    header p {
+      font-style: italic;
+      margin: 0.5em 0 0;
+    }
+
+    nav {
+      background: #ffefe2;
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      padding: 1em;
+      border-bottom: 2px solid #f4c5a4;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #3c2f2f;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: #d17b49;
+    }
+
+    section {
+      padding: 2em 5%;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5em;
+      margin-top: 2em;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    form {
+      background: #fff3ec;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    form input, form textarea, form button {
+      width: 100%;
+      margin-top: 1em;
+      padding: 0.8em;
+      border: 1px solid #d9b5a3;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    form button {
+      background: #d17b49;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    form button:hover {
+      background: #b9673b;
+    }
+
+    footer {
+      text-align: center;
+      background: #f8d7c2;
+      padding: 1em;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Douceurs de Marie</h1>
+    <p>Pâtisserie artisanale faite maison</p>
+  </header>
+
+  <nav>
+    <a href="#accueil">Accueil</a>
+    <a href="#realisations">Réalisations</a>
+    <a href="#commande">Commander</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="accueil">
+    <h2>Bienvenue !</h2>
+    <p>Je suis Marie, pâtissière passionnée depuis plus de 10 ans. Chaque gâteau est conçu sur mesure pour vos événements : anniversaires, mariages, baptêmes ou simplement pour le plaisir sucré d’un dimanche.</p>
+  </section>
+
+  <section id="realisations">
+    <h2>Mes réalisations</h2>
+    <div class="gallery">
+      <img src="https://via.placeholder.com/300x200?text=G%C3%A2teau+Chocolat" alt="Gâteau au chocolat">
+      <img src="https://via.placeholder.com/300x200?text=Pi%C3%A8ce+Mont%C3%A9e" alt="Pièce montée">
+      <img src="https://via.placeholder.com/300x200?text=Cupcakes" alt="Cupcakes décorés">
+      <img src="https://via.placeholder.com/300x200?text=Tarte+Fruits" alt="Tarte aux fruits">
+    </div>
+  </section>
+
+  <section id="commande">
+    <h2>Passer une commande</h2>
+    <form>
+      <label for="nom">Nom</label>
+      <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Votre email" required>
+
+      <label for="type">Type de gâteau souhaité</label>
+      <input type="text" id="type" name="type" placeholder="Ex : Fraisier, Opéra, Cupcakes...">
+
+      <label for="message">Détails / Date souhaitée</label>
+      <textarea id="message" name="message" rows="4" placeholder="Décrivez votre demande"></textarea>
+
+      <button type="submit">Envoyer la commande</button>
+    </form>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>📍 Basée à Lyon, France</p>
+    <p>📞 06 12 34 56 78</p>
+    <p>📧 douceursdemarie@gmail.com</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Douceurs de Marie — Site créé avec passion ❤️
+  </footer>
+</body>
+</html>
