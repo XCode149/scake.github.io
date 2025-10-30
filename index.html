@@ -3,104 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCake 🎃</title>
+  <title>SCake</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      background: #1b0e09;
-      color: #fff5e1;
-      overflow-x: hidden;
+      background: #fffaf8;
+      color: #3c2f2f;
     }
 
     header {
-      background: linear-gradient(135deg, #ff7b00, #a63b00);
+      background: #f8d7c2;
       text-align: center;
       padding: 2em 1em;
-      position: relative;
     }
 
-    header::after {
-      content: "🕸️";
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      font-size: 2em;
-      opacity: 0.5;
-    }
-
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
-      color: #fff8e7;
-      text-shadow: 2px 2px 5px #000;
-    }
-
-    header p {
-      font-style: italic;
-      margin: 0.5em 0 0;
-      color: #ffe7ba;
-    }
+    header h1 { font-size: 2.5em; margin: 0; }
+    header p { font-style: italic; margin: 0.5em 0 0; }
 
     nav {
-      background: #2b1a11;
+      background: #ffefe2;
       display: flex;
       justify-content: center;
       gap: 2em;
       padding: 1em;
-      border-bottom: 2px solid #ff7b00;
-      box-shadow: 0 2px 10px #000;
+      border-bottom: 2px solid #f4c5a4;
     }
+    nav a { text-decoration: none; color: #3c2f2f; font-weight: 600; }
+    nav a:hover { color: #d17b49; }
 
-    nav a {
-      text-decoration: none;
-      color: #ffb84c;
-      font-weight: 600;
-      transition: color 0.3s;
-    }
+    section { padding: 2em 5%; max-width: 1000px; margin: auto; }
 
-    nav a:hover {
-      color: #ff7b00;
-      text-shadow: 0 0 10px #ff7b00;
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5em;
+      margin-top: 2em;
     }
-
-    section {
-      padding: 2em 5%;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .gallery img {
-      width: 100%;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(255, 123, 0, 0.4);
-      transition: transform 0.3s, box-shadow 0.3s;
-      border: 2px solid #ff7b00;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(255, 150, 0, 0.6);
-    }
+    .gallery img { width: 100%; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s; }
+    .gallery img:hover { transform: scale(1.05); }
 
     .contact-card {
-      background: #2b1a11;
+      background: #fff3ec;
       padding: 1.5em 2em;
       border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(255, 123, 0, 0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       text-align: center;
       font-size: 1.1em;
       margin-top: 1.5em;
       font-weight: 500;
-      border: 1px solid #ff7b00;
-      color: #ffddbb;
+      border: 1px solid #f1c1a6;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+    .contact-card:hover { transform: scale(1.02); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
 
-    /* ---- AVIS HALLOWEEN ---- */
-    #avis {
-      text-align: center;
-    }
-
+    /* ---- SECTION AVIS ---- */
+    #avis { text-align: center; }
     .review-container {
       position: relative;
       overflow: hidden;
@@ -113,20 +71,21 @@
     .reviews {
       display: flex;
       transition: transform 0.8s ease-in-out;
+      will-change: transform;
     }
 
     .review {
-      min-width: 100%;
-      background: #2b1a11;
+      flex: 0 0 100%; /* IMPORTANT : chaque review prend 100% du conteneur */
+      box-sizing: border-box;
+      background: #fff3ec;
       border-radius: 15px;
       padding: 2em;
-      box-shadow: 0 4px 12px rgba(255, 120, 0, 0.3);
-      border: 1px solid #ff7b00;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 1px solid #f1c1a6;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #ffe7ba;
     }
 
     .review img {
@@ -134,98 +93,254 @@
       height: 80px;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid #ff7b00;
+      border: 3px solid #f8d7c2;
       margin-bottom: 1em;
     }
 
-    .stars {
-      color: #ffb400;
-      font-size: 1.3em;
-      margin-bottom: 0.5em;
-      text-shadow: 0 0 5px #ff7b00;
+    .stars { color: #ffb400; font-size: 1.3em; margin-bottom: 0.5em; }
+    .review p { font-size: 1em; font-style: italic; margin: 0.5em 0; color: #3c2f2f; text-align: center; }
+    .review strong { margin-top: 0.5em; color: #a75b39; }
+
+    /* boutons */
+    .carousel-controls {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display:flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      pointer-events: none;
+      padding: 0 6px;
     }
+    .carousel-controls button {
+      pointer-events: auto;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid #e6c9b0;
+      padding: 6px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .carousel-controls button:hover { transform: translateY(-2px); }
+
+    .dots {
+      margin-top: 0.8em;
+      display:flex;
+      justify-content:center;
+      gap:8px;
+    }
+    .dot {
+      width:10px;height:10px;border-radius:50%;background:#e6c9b0;opacity:0.6;cursor:pointer;
+    }
+    .dot.active { background:#a75b39;opacity:1; }
 
     footer {
       text-align: center;
-      background: #2b1a11;
+      background: #f8d7c2;
       padding: 1em;
       font-size: 0.9em;
-      color: #ffb84c;
-      border-top: 2px solid #ff7b00;
     }
 
-    .logo {
-      width: 150px;
-      border-radius: 50%;
-      box-shadow: 0 0 20px #ff7b00;
-      animation: pulse 2s infinite alternate;
-    }
+    .logo { width: 150px; height: auto; }
 
-    @keyframes pulse {
-      from { box-shadow: 0 0 10px #ff7b00; }
-      to { box-shadow: 0 0 30px #ff7b00; }
+    /* responsive small screens : réduire hauteur */
+    @media (max-width:420px){
+      .review-container { height: 320px; }
+      .review p { font-size: 0.95em; padding: 0 6px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="https://i.ibb.co/Sw8vbn7P/image0.jpg" alt="Logo SCake" class="logo">
-    <h1>SCake Halloween 🎃</h1>
-    <p>Pâtisseries hantées… mais délicieuses 👻</p>
+    <img src="https://i.ibb.co/Sw8vbn7P/image0.jpg" alt="image0" class="logo">
+    <h1>SCake</h1>
+    <p>Pâtisserie artisanale faite maison</p>
   </header>
 
   <nav>
     <a href="#accueil">Accueil</a>
-    <a href="#realisations">Sortilèges sucrés</a>
+    <a href="#realisations">Réalisations</a>
     <a href="#commande">Commander</a>
-    <a href="#avis">Avis ensorcelés</a>
+    <a href="#avis">Avis clients</a>
     <a href="#contact">Contact</a>
   </nav>
 
   <section id="accueil">
-    <h2>Bienvenue dans ma pâtisserie d'Halloween ! 🕷️</h2>
-    <p>Découvrez des gâteaux ensorcelants, des cupcakes monstrueusement bons et des tartes qui réveilleront les morts (de faim).</p>
+    <h2>Bienvenue !</h2>
+    <p>Je suis Sakina, pâtissière passionnée depuis plus de 10 ans. Chaque gâteau est conçu sur mesure pour vos événements : anniversaires, mariages, baptêmes ou simplement pour le plaisir sucré d’un dimanche.</p>
   </section>
 
-  <section id="avis">
-    <h2>👻 Avis ensorcelés</h2>
-    <div class="review-container">
-      <div class="reviews" id="reviews">
-        <div class="review">
-          <img src="https://i.ibb.co/4Vm1vns/client1.jpg" alt="Amélie">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p>Les cupcakes citrouille étaient à tomber ! Mon fantôme intérieur en redemande.</p>
-          <strong>— Jacob G.</strong>
-        </div>
-        <div class="review">
-          <img src="https://ibb.co/ynZxYXqp" alt="Karim">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p>Un crumble magique, on aurait dit qu’il sortait d’un chaudron !</p>
-          <strong>— Centre socioculturel Pont-Êvêque</strong>
-        </div>
-        <div class="review">
-          <img src="https://i.ibb.co/F5nMp4Z/client3.jpg" alt="Lina">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p>Le gâteau fantôme était trop mignon… et diaboliquement bon !</p>
-          <strong>— Lina P.</strong>
-        </div>
-      </div>
+  <section id="realisations">
+    <h2>Mes réalisations</h2>
+    <div class="gallery">
+      <img src="https://via.placeholder.com/300x200?text=G%C3%A2teau+Chocolat" alt="Gâteau au chocolat">
+      <img src="https://via.placeholder.com/300x200?text=Pi%C3%A8ce+Mont%C3%A9e" alt="Pièce montée">
+      <img src="https://via.placeholder.com/300x200?text=Cupcakes" alt="Cupcakes décorés">
+      <img src="https://via.placeholder.com/300x200?text=Tarte+Fruits" alt="Tarte aux fruits">
     </div>
   </section>
 
+  <section id="commande">
+    <h2>Passer une commande</h2>
+    <div class="contact-card">
+      <iframe data-tally-src="https://tally.so/embed/3NKgVp?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="0" frameborder="0" marginheight="0" marginwidth="0" title="Commande"></iframe>
+      <script>
+        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+          "undefined"!=typeof Tally?Tally.loadEmbeds():
+          d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc});
+        };
+        if("undefined"!=typeof Tally)v();
+        else if(d.querySelector('script[src="'+w+'"]')==null){
+          var s=d.createElement("script");
+          s.src=w;
+          s.onload=v;
+          s.onerror=v;
+          d.body.appendChild(s);
+        }
+      </script>
+    </div>
+  </section>
+
+  <!-- SECTION AVIS CLIENTS AVEC PHOTOS ET CARROUSEL -->
+  <section id="avis">
+    <h2>Avis clients</h2>
+    <div class="review-container" id="reviewContainer">
+      <div class="reviews" id="reviews">
+        <div class="review">
+          <img src="https://i.ibb.co/4Vm1vns/client1.jpg" alt="Amélie" onerror="this.src='https://via.placeholder.com/80'">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>Les cookies étaient délicieux ! Tout le monde a adoré.</p>
+          <strong>— Jacob G.</strong>
+        </div>
+
+        <div class="review">
+          <img src="https://i.ibb.co/dmtzS6v/client2.jpg" alt="Centre" onerror="this.src='https://via.placeholder.com/80'">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>Un vrai régal ! SCake a su parfaitement reproduire le design que l'on voulait pour notre crumble. Merci !</p>
+          <strong>— Centre socioculturel Pont-Êvêque</strong>
+        </div>
+
+        <!-- tu peux ajouter d'autres .review ici -->
+      </div>
+
+      <!-- controls -->
+      <div class="carousel-controls">
+        <button id="prevBtn" aria-label="Précédent">◀</button>
+        <button id="nextBtn" aria-label="Suivant">▶</button>
+      </div>
+    </div>
+
+    <div class="dots" id="dotsContainer" aria-hidden="false"></div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>📍 Basée à Vienne, France</p>
+    <p>📞 06 66 52 53 50</p>
+    <p>📧 sakinazemma@yahoo.com</p>
+  </section>
+
   <footer>
-    &copy; 2025 SCake — Édition spéciale Halloween 🕸️
+    &copy; 2025 SCake — Site créé avec ❤️ par Jacob Galea
   </footer>
 
   <script>
-    const reviews = document.getElementById('reviews');
-    const total = document.querySelectorAll('.review').length;
-    let index = 0;
+    (function(){
+      const reviewsEl = document.getElementById('reviews');
+      const reviewEls = document.querySelectorAll('.review');
+      const dotsContainer = document.getElementById('dotsContainer');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const reviewContainer = document.getElementById('reviewContainer');
 
-    setInterval(() => {
-      index = (index + 1) % total;
-      reviews.style.transform = `translateX(-${index * 100}%)`;
-    }, 4000);
+      let total = reviewEls.length;
+      let index = 0;
+      let intervalId = null;
+      const delay = 4000;
+
+      // handle zero or one review: cacher boutons/dots et stopper auto-scroll
+      function updateUIForCount() {
+        if (total <= 1) {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+          dotsContainer.style.display = 'none';
+          stopAuto();
+        } else {
+          prevBtn.style.display = '';
+          nextBtn.style.display = '';
+          dotsContainer.style.display = 'flex';
+          startAuto();
+        }
+      }
+
+      // set width/positioning robustly
+      function layout() {
+        // each .review already flex: 0 0 100%; but ensure transform resets
+        reviewsEl.style.transform = `translateX(-${index * 100}%)`;
+        // rebuild dots
+        dotsContainer.innerHTML = '';
+        for (let i=0;i<total;i++){
+          const d = document.createElement('div');
+          d.className = 'dot' + (i===index ? ' active' : '');
+          d.dataset.i = i;
+          d.addEventListener('click', ()=> { goTo(parseInt(d.dataset.i)); });
+          dotsContainer.appendChild(d);
+        }
+      }
+
+      function goTo(i){
+        if (total === 0) return;
+        index = ((i % total) + total) % total;
+        reviewsEl.style.transform = `translateX(-${index * 100}%)`;
+        updateDots();
+        restartAuto();
+      }
+
+      function prev(){ goTo(index - 1); }
+      function next(){ goTo(index + 1); }
+
+      function updateDots(){
+        const dots = dotsContainer.querySelectorAll('.dot');
+        dots.forEach((d, idx) => d.classList.toggle('active', idx === index));
+      }
+
+      function startAuto(){
+        stopAuto();
+        intervalId = setInterval(()=> {
+          index = (index + 1) % total;
+          reviewsEl.style.transform = `translateX(-${index * 100}%)`;
+          updateDots();
+        }, delay);
+      }
+
+      function stopAuto(){
+        if (intervalId) { clearInterval(intervalId); intervalId = null; }
+      }
+
+      function restartAuto(){
+        stopAuto();
+        if (total > 1) startAuto();
+      }
+
+      // events
+      prevBtn.addEventListener('click', prev);
+      nextBtn.addEventListener('click', next);
+
+      // pause on hover
+      reviewContainer.addEventListener('mouseenter', stopAuto);
+      reviewContainer.addEventListener('mouseleave', ()=> { if (total>1) startAuto(); });
+
+      // recalc on resize (keeps visual correct)
+      window.addEventListener('resize', ()=> { reviewsEl.style.transition = 'none'; layout(); setTimeout(()=> reviewsEl.style.transition = '', 50); });
+
+      // init
+      total = reviewEls.length;
+      index = 0;
+      updateUIForCount();
+      layout();
+    })();
   </script>
 </body>
 </html>
