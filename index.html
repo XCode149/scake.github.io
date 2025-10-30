@@ -18,15 +18,8 @@
       padding: 2em 1em;
     }
 
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
-    }
-
-    header p {
-      font-style: italic;
-      margin: 0.5em 0 0;
-    }
+    header h1 { font-size: 2.5em; margin: 0; }
+    header p { font-style: italic; margin: 0.5em 0 0; }
 
     nav {
       background: #ffefe2;
@@ -36,22 +29,10 @@
       padding: 1em;
       border-bottom: 2px solid #f4c5a4;
     }
+    nav a { text-decoration: none; color: #3c2f2f; font-weight: 600; }
+    nav a:hover { color: #d17b49; }
 
-    nav a {
-      text-decoration: none;
-      color: #3c2f2f;
-      font-weight: 600;
-    }
-
-    nav a:hover {
-      color: #d17b49;
-    }
-
-    section {
-      padding: 2em 5%;
-      max-width: 1000px;
-      margin: auto;
-    }
+    section { padding: 2em 5%; max-width: 1000px; margin: auto; }
 
     .gallery {
       display: grid;
@@ -59,17 +40,8 @@
       gap: 1.5em;
       margin-top: 2em;
     }
-
-    .gallery img {
-      width: 100%;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.05);
-    }
+    .gallery img { width: 100%; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s; }
+    .gallery img:hover { transform: scale(1.05); }
 
     .contact-card {
       background: #fff3ec;
@@ -83,17 +55,10 @@
       border: 1px solid #f1c1a6;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-    .contact-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
+    .contact-card:hover { transform: scale(1.02); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
 
     /* ---- SECTION AVIS ---- */
-    #avis {
-      text-align: center;
-    }
-
+    #avis { text-align: center; }
     .review-container {
       position: relative;
       overflow: hidden;
@@ -106,10 +71,12 @@
     .reviews {
       display: flex;
       transition: transform 0.8s ease-in-out;
+      will-change: transform;
     }
 
     .review {
-      min-width: 100%;
+      flex: 0 0 100%; /* IMPORTANT : chaque review prend 100% du conteneur */
+      box-sizing: border-box;
       background: #fff3ec;
       border-radius: 15px;
       padding: 2em;
@@ -130,23 +97,44 @@
       margin-bottom: 1em;
     }
 
-    .stars {
-      color: #ffb400;
-      font-size: 1.3em;
-      margin-bottom: 0.5em;
-    }
+    .stars { color: #ffb400; font-size: 1.3em; margin-bottom: 0.5em; }
+    .review p { font-size: 1em; font-style: italic; margin: 0.5em 0; color: #3c2f2f; text-align: center; }
+    .review strong { margin-top: 0.5em; color: #a75b39; }
 
-    .review p {
-      font-size: 1em;
-      font-style: italic;
-      margin: 0.5em 0;
-      color: #3c2f2f;
+    /* boutons */
+    .carousel-controls {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display:flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      pointer-events: none;
+      padding: 0 6px;
     }
+    .carousel-controls button {
+      pointer-events: auto;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid #e6c9b0;
+      padding: 6px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .carousel-controls button:hover { transform: translateY(-2px); }
 
-    .review strong {
-      margin-top: 0.5em;
-      color: #a75b39;
+    .dots {
+      margin-top: 0.8em;
+      display:flex;
+      justify-content:center;
+      gap:8px;
     }
+    .dot {
+      width:10px;height:10px;border-radius:50%;background:#e6c9b0;opacity:0.6;cursor:pointer;
+    }
+    .dot.active { background:#a75b39;opacity:1; }
 
     footer {
       text-align: center;
@@ -155,9 +143,12 @@
       font-size: 0.9em;
     }
 
-    .logo {
-      width: 150px;
-      height: auto;
+    .logo { width: 150px; height: auto; }
+
+    /* responsive small screens : réduire hauteur */
+    @media (max-width:420px){
+      .review-container { height: 320px; }
+      .review p { font-size: 0.95em; padding: 0 6px; }
     }
   </style>
 </head>
@@ -212,28 +203,36 @@
     </div>
   </section>
 
-  <!-- 💬 SECTION AVIS CLIENTS AVEC PHOTOS ET CARROUSEL -->
+  <!-- SECTION AVIS CLIENTS AVEC PHOTOS ET CARROUSEL -->
   <section id="avis">
     <h2>Avis clients</h2>
-    <div class="review-container">
+    <div class="review-container" id="reviewContainer">
       <div class="reviews" id="reviews">
         <div class="review">
-          <img src="https://i.ibb.co/4Vm1vns/client1.jpg" alt="Amélie">
+          <img src="https://i.ibb.co/4Vm1vns/client1.jpg" alt="Amélie" onerror="this.src='https://via.placeholder.com/80'">
           <div class="stars">⭐⭐⭐⭐⭐</div>
           <p>Les cookies étaient délicieux ! Tout le monde a adoré.</p>
           <strong>— Jacob G.</strong>
         </div>
 
         <div class="review">
-          <img src="https://i.ibb.co/dmtzS6v/client2.jpg" alt="Karim">
+          <img src="https://i.ibb.co/dmtzS6v/client2.jpg" alt="Centre" onerror="this.src='https://via.placeholder.com/80'">
           <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p>Un vrai régal ! SCake a su parfaitement reproduire le design que l'on voulais pour notre crumble. Merci !</p>
+          <p>Un vrai régal ! SCake a su parfaitement reproduire le design que l'on voulait pour notre crumble. Merci !</p>
           <strong>— Centre socioculturel Pont-Êvêque</strong>
         </div>
 
-        
+        <!-- tu peux ajouter d'autres .review ici -->
+      </div>
+
+      <!-- controls -->
+      <div class="carousel-controls">
+        <button id="prevBtn" aria-label="Précédent">◀</button>
+        <button id="nextBtn" aria-label="Suivant">▶</button>
       </div>
     </div>
+
+    <div class="dots" id="dotsContainer" aria-hidden="false"></div>
   </section>
 
   <section id="contact">
@@ -248,14 +247,100 @@
   </footer>
 
   <script>
-    const reviews = document.getElementById('reviews');
-    const total = document.querySelectorAll('.review').length;
-    let index = 0;
+    (function(){
+      const reviewsEl = document.getElementById('reviews');
+      const reviewEls = document.querySelectorAll('.review');
+      const dotsContainer = document.getElementById('dotsContainer');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const reviewContainer = document.getElementById('reviewContainer');
 
-    setInterval(() => {
-      index = (index + 1) % total;
-      reviews.style.transform = `translateX(-${index * 100}%)`;
-    }, 4000);
+      let total = reviewEls.length;
+      let index = 0;
+      let intervalId = null;
+      const delay = 4000;
+
+      // handle zero or one review: cacher boutons/dots et stopper auto-scroll
+      function updateUIForCount() {
+        if (total <= 1) {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+          dotsContainer.style.display = 'none';
+          stopAuto();
+        } else {
+          prevBtn.style.display = '';
+          nextBtn.style.display = '';
+          dotsContainer.style.display = 'flex';
+          startAuto();
+        }
+      }
+
+      // set width/positioning robustly
+      function layout() {
+        // each .review already flex: 0 0 100%; but ensure transform resets
+        reviewsEl.style.transform = `translateX(-${index * 100}%)`;
+        // rebuild dots
+        dotsContainer.innerHTML = '';
+        for (let i=0;i<total;i++){
+          const d = document.createElement('div');
+          d.className = 'dot' + (i===index ? ' active' : '');
+          d.dataset.i = i;
+          d.addEventListener('click', ()=> { goTo(parseInt(d.dataset.i)); });
+          dotsContainer.appendChild(d);
+        }
+      }
+
+      function goTo(i){
+        if (total === 0) return;
+        index = ((i % total) + total) % total;
+        reviewsEl.style.transform = `translateX(-${index * 100}%)`;
+        updateDots();
+        restartAuto();
+      }
+
+      function prev(){ goTo(index - 1); }
+      function next(){ goTo(index + 1); }
+
+      function updateDots(){
+        const dots = dotsContainer.querySelectorAll('.dot');
+        dots.forEach((d, idx) => d.classList.toggle('active', idx === index));
+      }
+
+      function startAuto(){
+        stopAuto();
+        intervalId = setInterval(()=> {
+          index = (index + 1) % total;
+          reviewsEl.style.transform = `translateX(-${index * 100}%)`;
+          updateDots();
+        }, delay);
+      }
+
+      function stopAuto(){
+        if (intervalId) { clearInterval(intervalId); intervalId = null; }
+      }
+
+      function restartAuto(){
+        stopAuto();
+        if (total > 1) startAuto();
+      }
+
+      // events
+      prevBtn.addEventListener('click', prev);
+      nextBtn.addEventListener('click', next);
+
+      // pause on hover
+      reviewContainer.addEventListener('mouseenter', stopAuto);
+      reviewContainer.addEventListener('mouseleave', ()=> { if (total>1) startAuto(); });
+
+      // recalc on resize (keeps visual correct)
+      window.addEventListener('resize', ()=> { reviewsEl.style.transition = 'none'; layout(); setTimeout(()=> reviewsEl.style.transition = '', 50); });
+
+      // init
+      total = reviewEls.length;
+      index = 0;
+      updateUIForCount();
+      layout();
+    })();
   </script>
 </body>
 </html>
