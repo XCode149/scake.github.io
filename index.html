@@ -89,39 +89,61 @@
       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
+    /* ---- SECTION AVIS ---- */
+    #avis {
+      text-align: center;
+    }
+
+    .review-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      max-width: 700px;
+      margin: 2em auto;
+      height: 260px;
+    }
+
     .reviews {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5em;
-      margin-top: 2em;
+      display: flex;
+      transition: transform 0.8s ease-in-out;
     }
 
     .review {
+      min-width: 100%;
       background: #fff3ec;
-      padding: 1.5em;
       border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 2em;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       border: 1px solid #f1c1a6;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    .review:hover {
-      transform: scale(1.02);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    .review img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #f8d7c2;
+      margin-bottom: 1em;
     }
 
     .stars {
       color: #ffb400;
-      font-size: 1.2em;
+      font-size: 1.3em;
       margin-bottom: 0.5em;
     }
 
     .review p {
+      font-size: 1em;
+      font-style: italic;
       margin: 0.5em 0;
+      color: #3c2f2f;
     }
 
     .review strong {
-      display: block;
       margin-top: 0.5em;
       color: #a75b39;
     }
@@ -190,32 +212,26 @@
     </div>
   </section>
 
-  <!-- 💬 SECTION AVIS CLIENTS -->
+  <!-- 💬 SECTION AVIS CLIENTS AVEC PHOTOS ET CARROUSEL -->
   <section id="avis">
     <h2>Avis clients</h2>
-    <div class="reviews">
-      <div class="review">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>Les cookies était succulents ! Tout le monde a adoré.</p>
-        <strong>— Jacob G.</strong>
-      </div>
+    <div class="review-container">
+      <div class="reviews" id="reviews">
+        <div class="review">
+          <img src="https://i.ibb.co/4Vm1vns/client1.jpg" alt="Amélie">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>Les cookies étaient délicieux ! Tout le monde a adoré.</p>
+          <strong>— Jacob G.</strong>
+        </div>
 
-      <div class="review">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>Un vrai régal ! Sakina a su parfaitement reproduire le design que je voulais. Merci !</p>
-        <strong>— Karim B.</strong>
-      </div>
+        <div class="review">
+          <img src="https://i.ibb.co/dmtzS6v/client2.jpg" alt="Karim">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>Un vrai régal ! SCake a su parfaitement reproduire le design que l'on voulais pour notre crumble. Merci !</p>
+          <strong>— Centre socioculturel Pont-Êvêque</strong>
+        </div>
 
-      <div class="review">
-        <div class="stars">⭐⭐⭐</div>
-        <p>Bon crumble, beaucoup on aimé !</p>
-        <strong>— Centre Socioculturel</strong>
-      </div>
-
-      <div class="review">
-        <div class="stars">⭐⭐⭐⭐</div>
-        <p>Très bons gâteaux, un peu sucrés à mon goût mais présentation superbe.</p>
-        <strong>— Thomas G.</strong>
+        
       </div>
     </div>
   </section>
@@ -230,5 +246,16 @@
   <footer>
     &copy; 2025 SCake — Site créé avec ❤️ par Jacob Galea
   </footer>
+
+  <script>
+    const reviews = document.getElementById('reviews');
+    const total = document.querySelectorAll('.review').length;
+    let index = 0;
+
+    setInterval(() => {
+      index = (index + 1) % total;
+      reviews.style.transform = `translateX(-${index * 100}%)`;
+    }, 4000);
+  </script>
 </body>
 </html>
