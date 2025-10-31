@@ -1,192 +1,307 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galerie Insta-like</title>
+  <title>SCake</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
       background: #fffaf8;
       color: #3c2f2f;
+    }
+
+    /* === BANNIÈRE === */
+    header {
+      width: 100%;
+      height: 300px; /* hauteur modifiable */
+      background: url("https://i.ibb.co/d4SBmsZw/banner.jpg") center/cover no-repeat;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      padding: 20px;
-    }
-
-    img {
-      width: 250px;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    img:hover {
-      transform: scale(1.03);
-    }
-
-    /* --- POPUP --- */
-    .popup {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* si tu veux un léger fondu noir par-dessus (optionnel, sinon supprime ce bloc)
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+    }
+    */
+
+    nav {
+      background: #ffefe2;
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      padding: 1em;
+      border-bottom: 2px solid #f4c5a4;
+    }
+    nav a { text-decoration: none; color: #3c2f2f; font-weight: 600; }
+    nav a:hover { color: #d17b49; }
+
+    section { padding: 2em 5%; max-width: 1000px; margin: auto; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5em;
+      margin-top: 2em;
+    }
+    .gallery img { width: 100%; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s; }
+    .gallery img:hover { transform: scale(1.05); }
+
+    .contact-card {
+      background: #fff3ec;
+      padding: 1.5em 2em;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      font-size: 1.1em;
+      margin-top: 1.5em;
+      font-weight: 500;
+      border: 1px solid #f1c1a6;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .contact-card:hover { transform: scale(1.02); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+
+    /* ---- SECTION AVIS ---- */
+    #avis { text-align: center; }
+    .review-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      max-width: 700px;
+      margin: 2em auto;
+      height: 260px;
+    }
+
+    .reviews {
+      display: flex;
+      transition: transform 0.8s ease-in-out;
+      will-change: transform;
+    }
+
+    .review {
+      flex: 0 0 100%;
+      box-sizing: border-box;
+      background: #fff3ec;
+      border-radius: 15px;
+      padding: 2em;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 1px solid #f1c1a6;
+      display: flex;
       flex-direction: column;
-      z-index: 10;
+      align-items: center;
+      justify-content: center;
     }
 
-    .popup img {
-      width: 70%;
-      max-width: 800px;
-      border-radius: 10px;
+    .review img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #f8d7c2;
+      margin-bottom: 1em;
     }
 
-    .popup .close {
-      position: absolute;
-      top: 20px; right: 30px;
-      color: white;
-      font-size: 2rem;
-      cursor: pointer;
-    }
+    .stars { color: #ffb400; font-size: 1.3em; margin-bottom: 0.5em; }
+    .review p { font-size: 1em; font-style: italic; margin: 0.5em 0; color: #3c2f2f; text-align: center; }
+    .review strong { margin-top: 0.5em; color: #a75b39; }
 
-    .popup .arrow {
-      position: absolute;
-      top: 50%;
-      font-size: 2rem;
-      color: white;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .arrow.left { left: 30px; }
-    .arrow.right { right: 30px; }
-
-    /* --- LIKE HEART --- */
-    .heart {
+    /* boutons */
+    .carousel-controls {
       position: absolute;
       top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      font-size: 80px;
-      color: rgba(255,0,0,0.8);
+      left: 0;
+      right: 0;
+      display:flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
       pointer-events: none;
-      animation: pop 0.6s ease forwards;
+      padding: 0 6px;
     }
-
-    @keyframes pop {
-      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    }
-
-    /* --- COMMENTAIRES --- */
-    .comments {
-      margin-top: 15px;
-      background: #fff;
-      width: 70%;
-      max-width: 800px;
+    .carousel-controls button {
+      pointer-events: auto;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid #e6c9b0;
+      padding: 6px 10px;
       border-radius: 10px;
-      padding: 10px 15px;
-      color: #333;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .carousel-controls button:hover { transform: translateY(-2px); }
+
+    .dots {
+      margin-top: 0.8em;
+      display:flex;
+      justify-content:center;
+      gap:8px;
+    }
+    .dot {
+      width:10px;height:10px;border-radius:50%;background:#e6c9b0;opacity:0.6;cursor:pointer;
+    }
+    .dot.active { background:#a75b39;opacity:1; }
+
+    footer {
+      text-align: center;
+      background: #f8d7c2;
+      padding: 1em;
+      font-size: 0.9em;
     }
 
-    .comments p {
-      margin: 5px 0;
+    /* responsive small screens */
+    @media (max-width:420px){
+      header { height: 200px; }
+      .review-container { height: 320px; }
+      .review p { font-size: 0.95em; padding: 0 6px; }
     }
   </style>
 </head>
 <body>
+  <!-- BANNIÈRE -->
+  <header></header>
 
-  <!-- TES IMAGES -->
-  <img src="https://picsum.photos/400?random=1" alt="img1">
-  <img src="https://picsum.photos/400?random=2" alt="img2">
-  <img src="https://picsum.photos/400?random=3" alt="img3">
-  <img src="https://picsum.photos/400?random=4" alt="img4">
+  <nav>
+    <a href="#accueil">Accueil</a>
+    <a href="#realisations">Réalisations</a>
+    <a href="#commande">Commander</a>
+    <a href="#avis">Avis clients</a>
+    <a href="#contact">Contact</a>
+  </nav>
 
-  <!-- POPUP -->
-  <div class="popup" id="popup">
-    <span class="close" id="close">&times;</span>
-    <span class="arrow left" id="prev">&#10094;</span>
-    <span class="arrow right" id="next">&#10095;</span>
-    <img id="popupImg" src="" alt="">
-    <div class="comments" id="commentsContainer">
-      <!-- 💬 Tu peux écrire tes commentaires ici -->
-      <p><strong>lucas_34 :</strong> Trop belle lumière 🔥</p>
-      <p><strong>emma.art :</strong> Wow le style est incroyable 😍</p>
+  <section id="accueil">
+    <h2>Bienvenue !</h2>
+    <p>Je suis Sakina, pâtissière passionnée depuis plus de 10 ans. Chaque gâteau est conçu sur mesure pour vos événements : anniversaires, mariages, baptêmes ou simplement pour le plaisir sucré d’un dimanche.</p>
+  </section>
+
+  <section id="realisations">
+    <h2>Mes réalisations</h2>
+    <div class="gallery">
+      <img src="https://i.ibb.co/9kMbmVq8/gateau-1.jpg" alt="Gâteau au chocolat">
+      <img src="https://i.ibb.co/G4j5WzZ3/gateau-2.jpg" alt="Pièce montée">
+      <img src="https://i.ibb.co/Rkg2fjLs/gateau-3.jpg" alt="Cupcakes décorés">
+      <img src="https://i.ibb.co/HDLZvnWC/gateau-4.jpg" alt="Tarte aux fruits">
+      <img src="https://i.ibb.co/84cqrjbL/gateau-5.jpg" alt="Gateau5">
+      <img src="https://i.ibb.co/sp9njVNf/gateau-6.jpg" alt="encore un gateau">
+      <img src="https://i.ibb.co/RTBHPGkP/gateau-7.jpg" alt="pareil">
     </div>
-  </div>
+  </section>
+
+  <section id="commande">
+    <h2>Passer une commande</h2>
+    <div class="contact-card">
+      <iframe data-tally-src="https://tally.so/embed/3NKgVp?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="0" frameborder="0" marginheight="0" marginwidth="0" title="Commande"></iframe>
+      <script>
+        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+          "undefined"!=typeof Tally?Tally.loadEmbeds():
+          d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc});
+        };
+        if("undefined"!=typeof Tally)v();
+        else if(d.querySelector('script[src="'+w+'"]')==null){
+          var s=d.createElement("script");
+          s.src=w;
+          s.onload=v;
+          s.onerror=v;
+          d.body.appendChild(s);
+        }
+      </script>
+    </div>
+  </section>
+
+  <section id="avis">
+    <h2>Avis clients</h2>
+    <div class="review-container" id="reviewContainer">
+      <div class="reviews" id="reviews">
+        <div class="review">
+          <img src="https://i.ibb.co/4Vm1vns/client1.jpg" alt="Amélie" onerror="this.src='https://via.placeholder.com/80'">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>Les cookies étaient délicieux ! Tout le monde a adoré.</p>
+          <strong>— Jacob G.</strong>
+        </div>
+
+        <div class="review">
+          <img src="https://i.ibb.co/JRGSyKHq/IMG-4206.jpg" alt="Centre" onerror="this.src='https://via.placeholder.com/80'">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>Un vrai régal ! SCake a su parfaitement reproduire le design que l'on voulait pour notre crumble. Merci !</p>
+          <strong>— Centre socioculturel Pont-Êvêque</strong>
+        </div>
+      </div>
+
+      <div class="carousel-controls">
+        <button id="prevBtn" aria-label="Précédent">◀</button>
+        <button id="nextBtn" aria-label="Suivant">▶</button>
+      </div>
+    </div>
+
+    <div class="dots" id="dotsContainer" aria-hidden="false"></div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>📍 Basée à Vienne, France</p>
+    <p>📞 06 66 52 53 50</p>
+    <p>📧 sakinazemma@yahoo.com</p>
+  </section>
+
+  <footer>
+    &copy; 2025 SCake — Site créé avec ❤️ par Jacob Galea
+  </footer>
 
   <script>
-    const images = document.querySelectorAll("body > img");
-    const popup = document.getElementById("popup");
-    const popupImg = document.getElementById("popupImg");
-    const closeBtn = document.getElementById("close");
-    const prev = document.getElementById("prev");
-    const next = document.getElementById("next");
-    const comments = document.getElementById("commentsContainer");
+    (function(){
+      const reviewsEl = document.getElementById('reviews');
+      const reviewEls = document.querySelectorAll('.review');
+      const dotsContainer = document.getElementById('dotsContainer');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const reviewContainer = document.getElementById('reviewContainer');
 
-    let currentIndex = 0;
+      let total = reviewEls.length;
+      let index = 0;
+      let intervalId = null;
+      const delay = 4000;
 
-    function openPopup(index) {
-      currentIndex = index;
-      popupImg.src = images[index].src;
-      popup.style.display = "flex";
-    }
-
-    function closePopup() {
-      popup.style.display = "none";
-    }
-
-    function showNext() {
-      currentIndex = (currentIndex + 1) % images.length;
-      popupImg.src = images[currentIndex].src;
-    }
-
-    function showPrev() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      popupImg.src = images[currentIndex].src;
-    }
-
-    images.forEach((img, index) => {
-      img.addEventListener("click", () => openPopup(index));
-
-      img.addEventListener("dblclick", (e) => {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "❤️";
-        img.parentElement.appendChild(heart);
-        setTimeout(() => heart.remove(), 600);
-      });
-    });
-
-    closeBtn.addEventListener("click", closePopup);
-    next.addEventListener("click", showNext);
-    prev.addEventListener("click", showPrev);
-
-    popup.addEventListener("dblclick", (e) => {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.innerHTML = "❤️";
-      popup.appendChild(heart);
-      setTimeout(() => heart.remove(), 600);
-    });
-
-    window.addEventListener("keydown", (e) => {
-      if (popup.style.display === "flex") {
-        if (e.key === "ArrowRight") showNext();
-        if (e.key === "ArrowLeft") showPrev();
-        if (e.key === "Escape") closePopup();
+      function updateUIForCount() {
+        if (total <= 1) {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+          dotsContainer.style.display = 'none';
+          stopAuto();
+        } else {
+          prevBtn.style.display = '';
+          nextBtn.style.display = '';
+          dotsContainer.style.display = 'flex';
+          startAuto();
+        }
       }
-    });
-  </script>
 
-</body>
-</html>
+      function layout() {
+        reviewsEl.style.transform = `translateX(-${index * 100}%)`;
+        dotsContainer.innerHTML = '';
+        for (let i=0;i<total;i++){
+          const d = document.createElement('div');
+          d.className = 'dot' + (i===index ? ' active' : '');
+          d.dataset.i = i;
+          d.addEventListener('click', ()=> { goTo(parseInt(d.dataset.i)); });
+          dotsContainer.appendChild(d);
+        }
+      }
+
+      function goTo(i){
+        if (total === 0) return;
+        index = ((i % total) + total) % total;
+        reviewsEl.style.transform = `translateX(-${index * 100}%)`;
+        updateDots();
+        restartAuto();
+      }
+
+      function prev(){ goTo(index - 1); }
+      function next(){ goTo(index + 1); }
+
+      func
