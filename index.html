@@ -12,14 +12,25 @@
       color: #3c2f2f;
     }
 
+    /* === BANNIÈRE === */
     header {
-      background: #f8d7c2;
-      text-align: center;
-      padding: 2em 1em;
+      width: 100%;
+      height: 300px; /* hauteur modifiable */
+      background: url("https://i.ibb.co/d4SBmsZw/banner.jpg") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
 
-    header h1 { font-size: 2.5em; margin: 0; }
-    header p { font-style: italic; margin: 0.5em 0 0; }
+    /* si tu veux un léger fondu noir par-dessus (optionnel, sinon supprime ce bloc)
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+    }
+    */
 
     nav {
       background: #ffefe2;
@@ -75,7 +86,7 @@
     }
 
     .review {
-      flex: 0 0 100%; /* IMPORTANT : chaque review prend 100% du conteneur */
+      flex: 0 0 100%;
       box-sizing: border-box;
       background: #fff3ec;
       border-radius: 15px;
@@ -143,21 +154,17 @@
       font-size: 0.9em;
     }
 
-    .logo { width: 150px; height: auto; }
-
-    /* responsive small screens : réduire hauteur */
+    /* responsive small screens */
     @media (max-width:420px){
+      header { height: 200px; }
       .review-container { height: 320px; }
       .review p { font-size: 0.95em; padding: 0 6px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://i.ibb.co/Sw8vbn7P/image0.jpg" alt="image0" class="logo">
-    <h1>SCake</h1>
-    <p>Pâtisserie artisanale faite maison</p>
-  </header>
+  <!-- BANNIÈRE -->
+  <header></header>
 
   <nav>
     <a href="#accueil">Accueil</a>
@@ -203,7 +210,6 @@
     </div>
   </section>
 
-  <!-- SECTION AVIS CLIENTS AVEC PHOTOS ET CARROUSEL -->
   <section id="avis">
     <h2>Avis clients</h2>
     <div class="review-container" id="reviewContainer">
@@ -221,11 +227,8 @@
           <p>Un vrai régal ! SCake a su parfaitement reproduire le design que l'on voulait pour notre crumble. Merci !</p>
           <strong>— Centre socioculturel Pont-Êvêque</strong>
         </div>
-
-        <!-- tu peux ajouter d'autres .review ici -->
       </div>
 
-      <!-- controls -->
       <div class="carousel-controls">
         <button id="prevBtn" aria-label="Précédent">◀</button>
         <button id="nextBtn" aria-label="Suivant">▶</button>
@@ -260,7 +263,6 @@
       let intervalId = null;
       const delay = 4000;
 
-      // handle zero or one review: cacher boutons/dots et stopper auto-scroll
       function updateUIForCount() {
         if (total <= 1) {
           prevBtn.style.display = 'none';
@@ -275,11 +277,8 @@
         }
       }
 
-      // set width/positioning robustly
       function layout() {
-        // each .review already flex: 0 0 100%; but ensure transform resets
         reviewsEl.style.transform = `translateX(-${index * 100}%)`;
-        // rebuild dots
         dotsContainer.innerHTML = '';
         for (let i=0;i<total;i++){
           const d = document.createElement('div');
@@ -324,18 +323,14 @@
         if (total > 1) startAuto();
       }
 
-      // events
       prevBtn.addEventListener('click', prev);
       nextBtn.addEventListener('click', next);
 
-      // pause on hover
       reviewContainer.addEventListener('mouseenter', stopAuto);
       reviewContainer.addEventListener('mouseleave', ()=> { if (total>1) startAuto(); });
 
-      // recalc on resize (keeps visual correct)
       window.addEventListener('resize', ()=> { reviewsEl.style.transition = 'none'; layout(); setTimeout(()=> reviewsEl.style.transition = '', 50); });
 
-      // init
       total = reviewEls.length;
       index = 0;
       updateUIForCount();
